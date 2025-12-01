@@ -1,7 +1,7 @@
 package shared
 
 import models.Identifier
-import cats.effect.{IOApp, ExitCode, IO}
+import cats.effect.{ExitCode, IO, IOApp}
 import cats.effect.std.Console
 import cats.syntax.all._
 import shared.models.Session
@@ -40,13 +40,13 @@ trait AOCApplication(solutions: Map[Identifier, Solution[IO]]) extends IOApp:
   final def run(args: List[String]): IO[ExitCode] =
     identifier(args) match
       case Right(id) =>
-        runSolution(id).attempt.flatMap({
+        runSolution(id).attempt.flatMap {
           case Right(answer) =>
             console
               .println(s"Task '$id'. The answer is $answer")
               .as(ExitCode.Success)
           case Left(exception) =>
             console.printStackTrace(exception).as(ExitCode.Error)
-        })
+        }
       case Left(error) =>
         console.errorln(error).as(ExitCode.Error)

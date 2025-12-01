@@ -19,11 +19,11 @@ object Day1:
       task.input
         .through(parse)
         .compile
-        .fold(initial)({ case ((zeros, rotated), current) =>
+        .fold(initial) { case ((zeros, rotated), current) =>
           val sum = rotated |+| current
           if (sum.angle == 0) (zeros + 1, sum)
           else (zeros, sum)
-        })
+        }
         .map(_.zeros.toString)
 
   final class Part2[F[_]: Concurrent] extends Solution[F]:
