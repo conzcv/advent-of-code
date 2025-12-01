@@ -1,0 +1,19 @@
+import mill.*, scalalib.*
+import mill.api.Task.Simple
+
+object shared extends ScalaModule:
+  def scalaVersion = "3.7.4"
+  def mvnDeps = Seq(
+    mvn"is.cir::ciris:3.11.1",
+    mvn"org.http4s::http4s-jdk-http-client:0.10.0"
+  )
+
+object `2025` extends ScalaModule:
+  def scalaVersion = "3.7.4"
+  def moduleDeps = Seq(shared)
+
+  object test extends ScalaTests, TestModule.Utest:
+    def utestVersion = "0.9.4"
+    def mvnDeps = Seq(
+      mvn"org.typelevel::cats-effect-testing-utest::1.7.0"
+    )
