@@ -10,7 +10,8 @@ import shared.Solution
 val solutions: Map[Identifier, Solution[IO]] = Map(
   Identifier(2025, 1, 1) -> Day1.Part1[IO],
   Identifier(2025, 1, 2) -> Day1.Part2[IO],
-  Identifier(2025, 2, 1) -> Day2.Part1[IO]
+  Identifier(2025, 2, 1) -> Day2.Part1[IO],
+  Identifier(2025, 2, 2) -> Day2.Part2[IO]
 )
 
 object Main2025 extends AOCApplication(solutions)

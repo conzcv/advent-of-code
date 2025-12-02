@@ -26,3 +26,46 @@ final case class IdRange(from: String, to: String):
           if (max1.toLong > max2.toLong) max1.toLong - 1 else max1.toLong
         LazyList.from(min to max).map(long => long.toString().repeat(2))
     }
+
+  private def primeFactors(n: Int): List[Int] = // could be better, i know
+    LazyList
+      .from(2)
+      .takeWhile(_ <= n)
+      .filter(n % _ == 0)
+      .filter(d => (2 until d).forall(d % _ != 0))
+      .toList
+
+  def invalids2: LazyList[Long] =
+    split.flatMap {
+      case IdRange(from, to) if from.size > 1 =>
+        val factors = primeFactors(from.length())
+        val fromPrimes: LazyList[Long] =
+          if (factors.size == 1 && factors.head == from.size)
+            LazyList.empty
+          else
+            for
+              divisor <- LazyList.from(factors)
+              divident = from.length() / divisor
+              min = from.take(divident)
+              max = to.take(divident)
+              invalid <- LazyList
+                .from(min.toLong to max.toLong)
+                .map(_.toString())
+                .filter(_.toSet.size > 1)
+                .map(_.repeat(divisor).toLong)
+            yield invalid
+
+        val fromUnit: LazyList[Long] =
+          val min = from.take(1)
+          val max = to.take(1)
+          LazyList
+            .from(min.toLong to max.toLong)
+            .map(_.toString().repeat(from.size).toLong)
+
+        val fromLong = from.toLong
+        val toLong = to.toLong
+
+        (fromPrimes concat fromUnit)
+          .filter(l => l >= fromLong && l <= toLong)
+      case _ => LazyList.empty
+    }

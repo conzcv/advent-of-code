@@ -20,3 +20,14 @@ object Day2:
         .compile
         .foldMonoid
         .map(_.toString())
+
+  final class Part2[F[_]: Concurrent] extends Solution[F]:
+    def of(task: Task[F]): F[String] =
+      task.input
+        .through(Parser.tokens)
+        .collect(Parser.range)
+        .map(_.invalids2)
+        .flatMap(Stream.iterable)
+        .compile
+        .foldMonoid
+        .map(_.toString())

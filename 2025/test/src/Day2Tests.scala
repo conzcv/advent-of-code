@@ -54,4 +54,11 @@ object Day2Tests extends EffectTestSuite[IO]:
         .of(Task(input))
         .map(answer => assert(answer == "1227775554"))
     }
+
+    test("part2") {
+      Day2
+        .Part2[IO]
+        .of(Task(input))
+        .map(answer => assert(answer == "4174379265"))
+    }
   }
