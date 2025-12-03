@@ -1,12 +1,12 @@
 package `2025`.day1
 
+import `2025`.day1.models.Rotation
 import cats.effect.Concurrent
+import cats.syntax.all.*
+import fs2.Pipe
+import fs2.text.*
 import shared.Solution
 import shared.Task
-import fs2.Pipe
-import fs2.text._
-import cats.syntax.all._
-import `2025`.day1.models.Rotation
 
 object Day1:
   def parse[F[_]]: Pipe[F, Byte, Rotation] =

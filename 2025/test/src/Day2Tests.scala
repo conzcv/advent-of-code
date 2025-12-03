@@ -1,15 +1,16 @@
 package `2025`
 
-import scala.concurrent.duration._
-import utest._
-import cats.syntax.all._
-import cats.effect.IO
-import cats.effect.testing.utest.EffectTestSuite
-import fs2.Stream
+import `2025`.day2.Day2
 import `2025`.day2.Parser
 import `2025`.day2.models.IdRange
-import `2025`.day2.Day2
+import cats.effect.IO
+import cats.effect.testing.utest.EffectTestSuite
+import cats.syntax.all.*
+import fs2.Stream
 import shared.Task
+import utest.*
+
+import scala.concurrent.duration.*
 
 object Day2Tests extends EffectTestSuite[IO]:
   override val timeout = 1.second

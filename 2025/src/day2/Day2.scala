@@ -1,12 +1,11 @@
 package `2025`.day2
 
-import shared.Solution
-import shared.Task
-
-import fs2.Stream
 import `2025`.day2.models.IdRange
 import cats.effect.Concurrent
-import cats.syntax.functor._
+import cats.syntax.functor.*
+import fs2.Stream
+import shared.Solution
+import shared.Task
 
 object Day2:
   final class Part1[F[_]: Concurrent] extends Solution[F]:

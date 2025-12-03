@@ -1,8 +1,8 @@
 package `2025`.day2
 
-import fs2._
-import fs2.text._
 import `2025`.day2.models.IdRange
+import fs2.*
+import fs2.text.*
 
 object Parser:
   private def parseTokens[F[_]](
