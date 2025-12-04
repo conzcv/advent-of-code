@@ -31,12 +31,12 @@ object Day3Tests extends EffectTestSuite[IO]:
 
   val tests = Tests {
     test("part1") {
-      for answer <- Day3.CommonSolution[IO](2).of(Task(input))
+      for answer <- Day3.CommonSolution(2).of(Task(input))
       yield assert(answer == "357")
     }
 
     test("part2") {
-      for answer <- Day3.CommonSolution[IO](12).of(Task(input))
+      for answer <- Day3.CommonSolution(12).of(Task(input))
       yield assert(answer == "3121910778619")
     }
   }

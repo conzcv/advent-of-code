@@ -2,7 +2,7 @@ package `2025`.day3
 
 import `2025`.day3.models.Bank
 import `2025`.day3.models.Puzzle
-import cats.effect.Concurrent
+import cats.effect.IO
 import cats.syntax.functor.*
 import fs2.Pipe
 import fs2.text.*
@@ -12,7 +12,7 @@ import shared.Task
 object Day3:
   opaque type Index = Int
 
-  def parse[F[_]]: Pipe[F, Byte, Bank] =
+  def parse: Pipe[IO, Byte, Bank] =
     _.through(utf8.decode andThen lines).collect(Bank.fromString)
 
   def initialState(lastIndex: Int): Puzzle[Index] =
@@ -52,9 +52,8 @@ object Day3:
       val unsolved: Puzzle[Int] = initialState(outputs - 1)
       getAnswer(unsolved).toLong
 
-  final class CommonSolution[F[_]: Concurrent](outputs: Int)
-      extends Solution[F]:
-    def of(task: Task[F]): F[String] =
+  final class CommonSolution(outputs: Int) extends Solution[IO]:
+    def of(task: Task[IO]): IO[String] =
       task.input
         .through(parse)
         .map(getJoltage(outputs))

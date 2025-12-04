@@ -1,12 +1,12 @@
 package `2025`.day4
 
+import cats.Representable
+import cats.data.RepresentableStore
 import cats.effect.IO
 import shared.Solution
 import shared.Task
 
-import cats.Representable
-import models._
-import cats.data.RepresentableStore
+import models.*
 
 final class Part2 extends Solution[IO]:
   type Result[A] = (value: A, changed: Boolean)

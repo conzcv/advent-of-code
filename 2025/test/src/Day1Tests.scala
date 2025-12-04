@@ -26,11 +26,11 @@ object Day1Tests extends EffectTestSuite[IO]:
 
   val tests = Tests {
     test("part1") {
-      for answer <- Day1.Part1[IO].of(Task(input))
+      for answer <- (new Day1.Part1).of(Task(input))
       yield assert(answer == "3")
     }
     test("part2") {
-      for answer <- Day1.Part2[IO].of(Task(input))
+      for answer <- (new Day1.Part2).of(Task(input))
       yield assert(answer == "6")
     }
   }

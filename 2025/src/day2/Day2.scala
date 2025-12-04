@@ -1,15 +1,15 @@
 package `2025`.day2
 
 import `2025`.day2.models.IdRange
-import cats.effect.Concurrent
+import cats.effect.IO
 import cats.syntax.functor.*
 import fs2.Stream
 import shared.Solution
 import shared.Task
 
 object Day2:
-  final class Part1[F[_]: Concurrent] extends Solution[F]:
-    def of(task: Task[F]): F[String] =
+  final class Part1 extends Solution[IO]:
+    def of(task: Task[IO]): IO[String] =
       task.input
         .through(Parser.tokens)
         .collect(Parser.range)
@@ -20,8 +20,8 @@ object Day2:
         .foldMonoid
         .map(_.toString())
 
-  final class Part2[F[_]: Concurrent] extends Solution[F]:
-    def of(task: Task[F]): F[String] =
+  final class Part2 extends Solution[IO]:
+    def of(task: Task[IO]): IO[String] =
       task.input
         .through(Parser.tokens)
         .collect(Parser.range)

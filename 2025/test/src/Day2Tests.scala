@@ -50,15 +50,13 @@ object Day2Tests extends EffectTestSuite[IO]:
     }
 
     test("part1") {
-      Day2
-        .Part1[IO]
+      (new Day2.Part1)
         .of(Task(input))
         .map(answer => assert(answer == "1227775554"))
     }
 
     test("part2") {
-      Day2
-        .Part2[IO]
+      (new Day2.Part2)
         .of(Task(input))
         .map(answer => assert(answer == "4174379265"))
     }

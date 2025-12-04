@@ -11,12 +11,12 @@ import cats.effect.IO
 import shared.Solution
 
 val solutions: Map[Identifier, Solution[IO]] = Map(
-  Identifier(2025, 1, 1) -> Day1.Part1[IO],
-  Identifier(2025, 1, 2) -> Day1.Part2[IO],
-  Identifier(2025, 2, 1) -> Day2.Part1[IO],
-  Identifier(2025, 2, 2) -> Day2.Part2[IO],
-  Identifier(2025, 3, 1) -> Day3.CommonSolution[IO](2),
-  Identifier(2025, 3, 2) -> Day3.CommonSolution[IO](12),
+  Identifier(2025, 1, 1) -> new Day1.Part1,
+  Identifier(2025, 1, 2) -> new Day1.Part2,
+  Identifier(2025, 2, 1) -> new Day2.Part1,
+  Identifier(2025, 2, 2) -> new Day2.Part2,
+  Identifier(2025, 3, 1) -> Day3.CommonSolution(2),
+  Identifier(2025, 3, 2) -> Day3.CommonSolution(12),
   Identifier(2025, 4, 1) -> new day4.Part1,
   Identifier(2025, 4, 2) -> new day4.Part2
 )
