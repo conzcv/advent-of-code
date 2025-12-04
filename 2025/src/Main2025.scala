@@ -5,6 +5,8 @@ import shared.models.Identifier
 import `2025`.day1.Day1
 import `2025`.day2.Day2
 import `2025`.day3.Day3
+import `2025`.day4
+
 import cats.effect.IO
 import shared.Solution
 
@@ -14,7 +16,9 @@ val solutions: Map[Identifier, Solution[IO]] = Map(
   Identifier(2025, 2, 1) -> Day2.Part1[IO],
   Identifier(2025, 2, 2) -> Day2.Part2[IO],
   Identifier(2025, 3, 1) -> Day3.CommonSolution[IO](2),
-  Identifier(2025, 3, 2) -> Day3.CommonSolution[IO](12)
+  Identifier(2025, 3, 2) -> Day3.CommonSolution[IO](12),
+  Identifier(2025, 4, 1) -> new day4.Part1,
+  Identifier(2025, 4, 2) -> new day4.Part2
 )
 
 object Main2025 extends AOCApplication(solutions)

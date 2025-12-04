@@ -12,6 +12,8 @@ object `2025` extends ScalaModule:
   def scalaVersion = "3.7.4"
   def moduleDeps = Seq(shared)
 
+  def scalacOptions = Seq("-Xkind-projector:underscores")
+
   object test extends ScalaTests, TestModule.Utest:
     def utestVersion = "0.9.4"
     def mvnDeps = Seq(
