@@ -2,6 +2,10 @@ package `2025`.day4
 
 import cats.Representable
 import cats.Functor
+import cats.Traverse
+import cats.Applicative
+import cats.Eval
+import cats.syntax.traverse._
 
 package object models {
   opaque type Coordinates = (Int, Int)
@@ -53,6 +57,24 @@ package object models {
     given Functor[Grid] =
       new:
         def map[A, B](fa: Grid[A])(f: A => B): Grid[B] = fa.map(f)
+
+    given Traverse[Grid] =
+      new Traverse[Grid]:
+        def traverse[G[_]: Applicative, A, B](fa: Grid[A])(
+            f: A => G[B]
+        ): G[Grid[B]] =
+          fa.toVector.traverse(_.traverse(f))
+        def foldLeft[A, B](fa: Grid[A], b: B)(f: (B, A) => B): B =
+          fa.toVector.foldLeft(b)((accumulator, vector) =>
+            vector.foldLeft(accumulator)(f)
+          )
+        def foldRight[A, B](fa: Grid[A], lb: Eval[B])(
+            f: (A, Eval[B]) => Eval[B]
+        ): Eval[B] =
+          fa.toVector.foldRight(lb)((vector, accumulator) =>
+            vector.foldRight(accumulator)(f)
+          )
+        override def map[A, B](fa: Grid[A])(f: A => B): Grid[B] = fa.map(f)
 
     def representable(
         width: Int,

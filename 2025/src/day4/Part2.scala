@@ -6,6 +6,8 @@ import cats.effect.IO
 import shared.Solution
 import shared.Task
 
+import cats.syntax.foldable._
+
 import models.*
 
 final class Part2 extends Solution[IO]:
@@ -27,7 +29,7 @@ final class Part2 extends Solution[IO]:
 
   def takeToTheLimit(store: GridStore[Position], count: Int = 0): Int =
     val taken = store.coflatMap(take)
-    val changes: Int = taken.fa.toVector.flatten.count(_.changed)
+    val changes: Int = taken.fa.toIterable.count(_.changed)
     if (changes > 0) takeToTheLimit(taken.map(_.value), count + changes)
     else count
 

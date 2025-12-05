@@ -9,6 +9,8 @@ import cats.effect.IO
 import shared.Solution
 import shared.Task
 
+import cats.syntax.foldable._
+
 import models.*
 
 final class Part1 extends Solution[IO]:
@@ -35,8 +37,7 @@ final class Part1 extends Solution[IO]:
       store
         .coflatMap(countOfNeighbors)
         .fa
-        .toVector
-        .flatten
+        .toIterable
         .count(_.exists(_ < 4))
         .toString()
     }
