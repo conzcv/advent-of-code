@@ -9,26 +9,17 @@ import utest.*
 
 import scala.concurrent.duration.*
 
-import day5.{Part1, Part2}
+import `2025`.day6.{Part1, Part2}
 
-import cats.data.OneAnd
-
-object Day5Tests extends EffectTestSuite[IO]:
+object Day6Tests extends EffectTestSuite[IO]:
   override val timeout = 1.second
 
   val inputData: List[String] =
     List(
-      "3-5",
-      "10-14",
-      "16-20",
-      "12-18",
-      "",
-      "1",
-      "5",
-      "8",
-      "11",
-      "17",
-      "32"
+      "123 328  51 64 ",
+      " 45 64  387 23 ",
+      "  6 98  215 314",
+      "*   +   *   +  "
     )
 
   val input: Stream[IO, Byte] =
@@ -40,9 +31,12 @@ object Day5Tests extends EffectTestSuite[IO]:
 
   val tests = Tests {
     test("part1") {
-      (new Part1).of(Task(input)).map(_ == "3")
+      for answer <- (new Part1).of(Task(input))
+      yield assert(answer == "4277556")
     }
+
     test("part2") {
-      (new Part2).of(Task(input)).map(_ == "14")
+      for answer <- (new Part2).of(Task(input))
+      yield assert(answer == "3263827")
     }
   }
