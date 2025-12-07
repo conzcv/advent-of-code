@@ -2,6 +2,8 @@ package `2025`.day4
 
 import `2025`.day4.models.Grid
 import `2025`.day4.models.Neighborhood
+import `2025`.day4.models.Dimensions
+
 import cats.Representable
 import cats.data.RepresentableStore
 import cats.effect.Concurrent
@@ -14,13 +16,12 @@ import cats.syntax.foldable._
 import models.*
 
 final class Part1 extends Solution[IO]:
-  val countOfNeighbors: GridStore[Position] => Option[Int] =
+  def numberOfNeighbors(using
+      D: Dimensions
+  ): GridStore[Position] => Option[Int] =
     store =>
-      val neighborhood: Coordinates => Neighborhood[Coordinates] =
-        Coordinates.neighborhood(store.fa.width, store.fa.height)
-
       val focusNeighborhood: Neighborhood[Position] =
-        store.experiment(neighborhood)
+        store.experiment(Neighborhood.ofCoordinates)
 
       focusNeighborhood.focus match
         case Position.Empty    => None
@@ -28,14 +29,13 @@ final class Part1 extends Solution[IO]:
 
   def of(task: Task[IO]): IO[String] =
     Common.extractGrid(task).map { grid =>
-      given Representable.Aux[Grid, Coordinates] =
-        Grid.representable(grid.width, grid.height)
+      given Dimensions = grid.dimensions
 
       val store: GridStore[Position] =
         RepresentableStore(grid, Coordinates.zero)
 
       store
-        .coflatMap(countOfNeighbors)
+        .coflatMap(numberOfNeighbors)
         .fa
         .toIterable
         .count(_.exists(_ < 4))

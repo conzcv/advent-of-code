@@ -4,6 +4,7 @@ import cats.Functor
 import cats.kernel.Monoid
 import cats.syntax.foldable._
 import cats.syntax.semigroup._
+import org.http4s.syntax.header
 
 final case class Neighborhood[+A](
     focus: A,
@@ -41,3 +42,21 @@ object Neighborhood:
           bottomleft = fa.bottomleft.map(f),
           left = fa.left.map(f)
         )
+
+  def ofCoordinates(c: Coordinates)(using
+      D: Dimensions
+  ): Neighborhood[Coordinates] =
+    val prj: PartialFunction[(Int, Int), Coordinates] =
+      Coordinates.projection
+
+    Neighborhood(
+      focus = c,
+      topleft = prj.lift(c.x - 1, c.y - 1),
+      top = prj.lift(c.x, c.y - 1),
+      topright = prj.lift(c.x + 1, c.y - 1),
+      right = prj.lift(c.x + 1, c.y),
+      bottomright = prj.lift(c.x + 1, c.y + 1),
+      bottom = prj.lift(c.x, c.y + 1),
+      bottomleft = prj.lift(c.x - 1, c.y + 1),
+      left = prj.lift(c.x - 1, c.y)
+    )

@@ -8,45 +8,45 @@ import cats.Eval
 import cats.syntax.traverse._
 
 package object models {
+  opaque type Dimensions = (Int, Int)
+
+  object Dimensions:
+    extension (w: Dimensions)
+      def width: Int = w._1
+      def height: Int = w._2
+
   opaque type Coordinates = (Int, Int)
 
   object Coordinates:
     val zero: Coordinates = (0, 0)
 
-    def neighborhood(
-        width: Int,
-        height: Int
-    ): Coordinates => Neighborhood[Coordinates] =
-      def of(x: Int, y: Int): Option[Coordinates] =
-        for
-          _x <- Option.when(x >= 0 && x < width)(x)
-          _y <- Option.when(y >= 0 && y < height)(y)
-        yield (_x, _y)
+    def of(x: Int, y: Int): Coordinates = (x, y)
 
-      locally { case (x, y) =>
-        Neighborhood(
-          focus = (x, y),
-          topleft = of(x - 1, y - 1),
-          top = of(x, y - 1),
-          topright = of(x + 1, y - 1),
-          right = of(x + 1, y),
-          bottomright = of(x + 1, y + 1),
-          bottom = of(x, y + 1),
-          bottomleft = of(x - 1, y + 1),
-          left = of(x - 1, y)
-        )
-      }
+    extension (c: Coordinates)
+      def x: Int = c._1
+      def y: Int = c._2
+      def left: Coordinates = (c._1 - 1, c._2)
+      def right: Coordinates = (c._1 + 1, c._2)
+      def top: Coordinates = (c._1, c._2 - 1)
+      def bottom: Coordinates = (c._1, c._2 + 1)
+
+    def projection(using
+        D: Dimensions
+    ): PartialFunction[(Int, Int), Coordinates] =
+      inline def xCondition(x: Int): Boolean = x >= 0 && x < D._1
+      inline def yCondition(y: Int): Boolean = y >= 0 && y < D._2
+      locally { case (x, y) if xCondition(x) && yCondition(y) => (x, y) }
 
   opaque type Grid[+A] = Vector[Vector[A]]
 
-  extension [A](r: Grid[A])
-    def toVector: Vector[Vector[A]] = r
-    def width: Int = r.head.length
-    def height: Int = r.length
-    def map[B](f: A => B): Grid[B] = r.map(_.map(f))
-    def apply(coordinates: Coordinates): A = r(coordinates._2)(coordinates._1)
-
   object Grid:
+
+    extension [A](r: Grid[A])
+      def toVector: Vector[Vector[A]] = r
+      def dimensions: Dimensions = (r.head.length, r.length)
+      def map[B](f: A => B): Grid[B] = r.map(_.map(f))
+      def apply(coordinates: Coordinates): A = r(coordinates._2)(coordinates._1)
+
     def from[A](vector: Vector[Vector[A]]): Option[Grid[A]] =
       for
         head <- vector.headOption
@@ -76,9 +76,8 @@ package object models {
           )
         override def map[A, B](fa: Grid[A])(f: A => B): Grid[B] = fa.map(f)
 
-    def representable(
-        width: Int,
-        height: Int
+    given representable(using
+        D: Dimensions
     ): Representable.Aux[Grid, Coordinates] =
       new Representable[Grid]:
         type Representation = Coordinates
@@ -86,7 +85,7 @@ package object models {
 
         def index[A](f: Grid[A]): Coordinates => A = f.apply
         def tabulate[A](f: Coordinates => A): Grid[A] =
-          (0 until height).toVector.map(y =>
-            (0 until width).toVector.map(x => f(x, y))
+          (0 until D._2).toVector.map(y =>
+            (0 until D._1).toVector.map(x => f(x, y))
           )
 }
